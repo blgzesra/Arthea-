@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arthea | Sanat Galerisi</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts:Zarif başlıklar) & Raleway (Okunaklı metinler) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;600&family=Raleway:wght@200;300;500&display=swap" rel="stylesheet">
+
+    <style>
+        /* TEMEL STİLLER */
+        body {
+            background-color: #F8F5F2; /*Krem rengi */
+            font-family: 'Raleway', sans-serif;
+            color: #4a4a4a;
+            font-size: 17px; /* Yazı boyutu */
+            --main-red: #A92B2B; /*Ana kımızı*/
+        }
+        .font-serif { font-family: 'Cormorant Garamond', serif; }
+        
+        /* SAYFALAR ARASI GEÇİŞ */
+        .page {
+            display: none; /* Tüm sayfaları varsayılan olarak gizle */
+            animation: fadeIn 0.8s ease-in-out;
+        }
+        .page.active {
+            display: block; /* Sadece aktif olanı göster */
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* HEADER & NAVİGASYON */
+        header {
+            background-color: rgba(248, 245, 242, 0.8);
+            backdrop-filter: blur(10px);
+        }
+        .nav-link {
+            position: relative;
+            transition: color 0.3s;
+            cursor: pointer;
+            color: #4a4a4a; /* Yazıları varsayılan olarak koyu siyah yap */
+            font-weight: 600; /* Yazıları kalınlaştır */
+        }
+        .nav-link:hover {
+            color: var(--main-red); /* Üzerine gelince kırmızı yap */
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background-color: var(--main-red);
+            transition: width 0.4s ease;
+        }
+        .nav-link:hover::after, .nav-link.active::after {
+            width: 100%;
+        }
+        .nav-link.active {
+            color: var(--main-red);
+        }
+        /* Tıklanan alt menü öğesini de aktif göstermek için*/
+        .submenu a.active {
+            color: var(--main-red);
+            font-weight:600;
+        }
+        .submenu a {
+             cursor: pointer;
+             color: var(--main-red); /*Alt menü yazıları kırmızı*/
+        }
+        .submenu {
+            display: none;
+            position: absolute;
+            background-color: rgba(248, 245, 242, 0.9); /* Şeffaf beyaz kutu */
+            backdrop-filter: blur(8px); /* Cam efekti */
+            border: 1px solid rgba(0,0,0,0.04); /* Hafif çerçeve */
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            z-index: 10;
+        }
+        /* TIKLAMA İLE AÇILAN MENÜ  */
+        .submenu.is-open {
+            display: block;
+        }
+
+        /* MODAL (Açılır Pencere) Stilleri */
+        .modal {
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .modal.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+        .modal-content {
+             animation: fadeIn 0.3s ease-out;
+        }
+
+        /* İÇERİK STİLLERİ */
+        .artwork-card {
+            background: #fff;
+            border: 1px solid #EAEAEA;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .artwork-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.08);
+        }
+        .artist-card {
+            text-align: center;
+        }
+        .artist-card img {
+            filter: grayscale(100%);
+            transition: filter 0.4s;
+            cursor: pointer;
+        }
+        .artist-card:hover img {
+            filter: grayscale(0%);
+        }
+        
+        /* Giriş Sayfası Arka Plan Kırmızılığı */
+        .red-cloud-background-home {
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(ellipse 60% 50% at 50% 50%, rgba(169, 43, 43, 0.35), transparent 70%);
+            background-repeat: no-repeat;
+            background-position: center;
+            pointer-events: none;
+            z-index: 0;
+            animation: cloudBreathe 12s infinite ease-in-out alternate;
+        }
+
+        /* Diğer Sayfalar için kırmızılık belirginliği */
+        .red-cloud-background-localized {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%; 
+            height: 90%;
+            background-image: radial-gradient(ellipse at center, rgba(169, 43, 43, 0.25), transparent 70%);
+            background-repeat: no-repeat;
+            background-position: center;
+            pointer-events: none;
+            z-index: 0;
+            animation: cloudPulse 15s infinite ease-in-out alternate;
+        }
+        
+        @keyframes cloudPulse {
+            0% { transform: translate(-50%, -55%) scale(0.95); opacity: 0.8; }
+            50% { transform: translate(-50%, -45%) scale(1.05); opacity: 1; }
+            100% { transform: translate(-50%, -55%) scale(0.95); opacity: 0.8; }
+        }
+
+        @keyframes cloudBreathe {
+            from { transform: scale(1); opacity: 0.8; }
+            to { transform: scale(1.1); opacity: 1; }
+        }
+
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- === HEADER / ANA NAVİGASYON === -->
+    <header class="sticky top-0 w-full z-50 border-b border-gray-200">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex-1 flex justify-start">
+                <a class="font-serif text-4xl font-bold text-gray-800 nav-trigger" data-page="page-home">Arthea</a>
+            </div>
+            <nav class="hidden md:flex items-center space-x-8 text-base tracking-widest uppercase">
+                <a class="nav-link nav-trigger" data-page="page-home">Giriş</a>
+                <div class="has-submenu relative">
+                    <a class="nav-link menu-toggle">Sanat Eserleri</a>
+                    <div class="submenu mt-5 p-4 rounded shadow-lg space-y-2 w-48">
+                        <a class="block px-2 py-1 hover:text-red-800 rounded nav-trigger" data-page="page-art-1">Galeri I</a>
+                        <a class="block px-2 py-1 hover:text-red-800 rounded nav-trigger" data-page="page-art-2">Galeri II</a>
+                        <a class="block px-2 py-1 hover:text-red-800 rounded nav-trigger" data-page="page-art-3">Galeri III</a>
+                        <a class="block px-2 py-1 hover:text-red-800 rounded nav-trigger" data-page="page-art-4">Galeri IV</a>
+                        <a class="block px-2 py-1 hover:text-red-800 rounded nav-trigger" data-page="page-art-5">Galeri V</a>
+                    </div>
+                </div>
+                <div class="has-submenu relative">
+                    <a class="nav-link menu-toggle">Sanatçılar</a>
+                    <div class="submenu mt-5 p-4 rounded shadow-lg space-y-2 w-48">
+                        <a class="block px-2 py-1 hover:text-red-800 rounded nav-trigger" data-page="page-artist-1">Portreler I</a>
+                        <a class="block px-2 py-1 hover:text-red-800 rounded nav-trigger" data-page="page-artist-2">Portreler II</a>
+                        <a class="block px-2 py-1 hover:text-red-800 rounded nav-trigger" data-page="page-artist-3">Portreler III</a>
+                        <a class="block px-2 py-1 hover:text-red-800 rounded nav-trigger" data-page="page-artist-4">Portreler IV</a>
+                        <a class="block px-2 py-1 hover:text-red-800 rounded nav-trigger" data-page="page-artist-5">Portreler V</a>
+                    </div>
+                </div>
+                <div class="has-submenu relative">
+                    <a class="nav-link menu-toggle">Müzeler</a>
+                    <div class="submenu mt-5 p-4 rounded shadow-lg space-y-2 w-48">
+                        <a class="block px-2 py-1 hover:text-red-800 rounded nav-trigger" data-page="page-museum-1">Louvre</a>
+                        <a class="block px-2 py-1 hover:text-red-800 rounded nav-trigger" data-page="page-museum-2">MOMA</a>
+                        <a class="block px-2 py-1 hover:text-red-800 rounded nav-trigger" data-page="page-museum-3">Uffizi</a>
+                        <a class="block px-2 py-1 hover:text-red-800 rounded nav-trigger" data-page="page-museum-4">Prado</a>
+                    </div>
+                </div>
+            </nav>
+            <div class="flex-1"></div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-6 py-16">
+        <!-- === SAYFA 1: GİRİŞ === -->
+        <section id="page-home" class="page">
+            <div class="relative text-center flex flex-col items-center justify-center py-20 md:py-32 overflow-hidden">
+                <!-- Arka Plan Bulutu -->
+                <div class="red-cloud-background-home"></div>
+                <!-- İçerik -->
+                <div class="relative z-10">
+                    <h1 class="font-serif text-6xl md:text-8xl font-bold text-gray-800 leading-tight">Sanatın <br> Zamansız Ruhu</h1>
+                    <p class="mt-6 max-w-2xl mx-auto text-lg text-gray-600">Arthea, sanat tarihinin en değerli anlarını ve dehalarını bir araya getiren dijital bir kürasyondur. Eserlerin, sanatçıların ve kutsal sanat mekanlarının derinliklerine yolculuk yapın.</p>
+                    <button id="discover-button" class="mt-10 bg-transparent border-2 border-[var(--main-red)] text-[var(--main-red)] font-bold py-3 px-12 uppercase tracking-widest hover:bg-[var(--main-red)] hover:text-white transition duration-300">Galeriyi Keşfet</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- === SANAT ESERLERİ SAYFALARI (5 Sayfa) === -->
+        <section id="page-art-1" class="page">
+            <div class="relative overflow-hidden">
+                <div class="red-cloud-background-localized"></div>
+                <div class="relative z-10">
+                    <h2 class="font-serif text-5xl text-left italic mb-12 text-[var(--main-red)] -ml-6 md:ml-0">Galeri I: Rönesans'ın İncileri</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
+                        <div class="artwork-card rounded-lg overflow-hidden"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Sandro_Botticelli_-_La_nascita_di_Venere_-_Google_Art_Project_-_edited.jpg/500px-Sandro_Botticelli_-_La_nascita_di_Venere_-_Google_Art_Project_-_edited.jpg" class="w-full h-64 object-cover" alt="[Venüs'ün Doğuşu'nun Resmi]"><div class="p-6"><h3 class="font-serif text-2xl font-bold italic">Venüs'ün Doğuşu</h3><p class="text-sm text-gray-500 mb-4">Sandro Botticelli</p><button class="story-btn text-sm text-[var(--main-red)] font-semibold" data-title="Venüs'ün Doğuşu" data-story="Botticelli'nin bu eseri, güzellik ve aşk tanrıçası Venüs'ün denizden doğuşunu betimler. Antik mitolojiye duyulan hayranlığın Rönesans sanatındaki en saf ifadelerinden biridir. Eserdeki zarafet ve ince detaylar, Floransa'nın sanatsal dehasını yansıtır. Aşk ve güzellik tanrıçası Venüs'ün (Afrodit) denizde doğduktan hemen sonra, dev bir istiridye kabuğu üzerinde kıyıya varış anını anlatır.
+Sol tarafta, Batı Rüzgarı Tanrısı Zefirus ve eşi Chloris, nefesleriyle Venüs'ü karaya doğru iterler. Sağ tarafta ise mevsim tanrıçalarından biri (genellikle İlkbahar Hora'sı), Venüs'ü çiçekli bir pelerinle karşılamak için bekler.
+Bu eser, ilahi güzelliğin ve baharın dünyaya gelişini simgeler.">Hikayeyi Oku &rarr;</button></div></div>
+                        <div class="artwork-card rounded-lg overflow-hidden"><img src="https://ichef.bbci.co.uk/ace/ws/640/cpsprodpb/dd02/live/695d7ac0-1129-11ef-b9d8-4f52aebe147d.jpg.webp" class="w-full h-64 object-cover" alt="[Mona Lisa'nın Resmi]"><div class="p-6"><h3 class="font-serif text-2xl font-bold italic">Mona Lisa</h3><p class="text-sm text-gray-500 mb-4">Leonardo da Vinci</p><button class="story-btn text-sm text-[var(--main-red)] font-semibold" data-title="Mona Lisa" data-story="Esrarengiz gülümsemesiyle sanat tarihinin en ikonik portresi olan Mona Lisa, Leonardo'nun 'sfumato' tekniğindeki ustalığını sergiler. Gözlerindeki canlılık ve arka plandaki hayali manzara, onu zamanın ötesine taşır. Mona Lisa, Leonardo da Vinci'nin 1503-1506 yıllarında Floransalı tüccar eşi Lisa Gherardini'yi resmettiği inanılan, dünyanın en ünlü portresidir.">Hikayeyi Oku &rarr;</button></div></div>
+                        <div class="artwork-card rounded-lg overflow-hidden"><img src="resimler/ademinyaratilisi.jpg" class="w-full h-64 object-cover" alt="[Adem'in Yaratılışı'nın Resmi]"><div class="p-6"><h3 class="font-serif text-2xl font-bold italic">Adem'in Yaratılışı</h3><p class="text-sm text-gray-500 mb-4">Michelangelo</p><button class="story-btn text-sm text-[var(--main-red)] font-semibold" data-title="Adem'in Yaratılışı" data-story="Sistina Şapeli'nin tavanını süsleyen bu fresk, Tanrı'nın ilk insan Adem'e hayat üflediği o ilahi anı betimler. İki parmak birbirine tam değmez; aradaki o küçük boşluk, Tanrı'nın Adem'e sadece fiziksel varlık değil, aynı zamanda hayat kıvılcımını (ilahi ruhu) aktardığı o mucizevi ve gerilimli anı simgeler. Kısacası bu sahne, insanlığın ilahi dokunuşla hayata gelişinin tasviridir. sanat tarihindeki en güçlü ve gerilim dolu anlardan biridir.">Hikayeyi Oku &rarr;</button></div></div>
+                        <div class="artwork-card rounded-lg overflow-hidden"><img src="resimler/atinaokulu.jpg" class="w-full h-64 object-cover" alt="[Atina Okulu'nun Resmi]"><div class="p-6"><h3 class="font-serif text-2xl font-bold italic">Atina Okulu</h3><p class="text-sm text-gray-500 mb-4">Raphael</p><button class="story-btn text-sm text-[var(--main-red)] font-semibold" data-title="Atina Okulu" data-story="Atina Okulu, Rafael tarafından Vatikan için çizilen ve tek bir hikayeden ziyade klasik felsefenin zirvesini kutlayan sembolik bir tablodur. Eser, Antik Yunan'ın en büyük filozoflarını ve bilim insanlarını (gerçekte hiç bir araya gelmemiş olsalar da) görkemli bir mimaride toplar. Tam merkezde, göğü işaret ederek idealizmi temsil eden Platon ile yeri işaret ederek somut dünyayı ve mantığı temsil eden Aristoteles durur; bu ikili, felsefenin iki ana kolunu simgeler. Çevrelerindeki Pisagor, Öklid ve Diyojen gibi diğer düşünürlerle birlikte bu fresk, Rönesans'ın antik bilgeliğe duyduğu derin saygının ve onu modern düşünceyle birleştirme idealinin bir özetidir. Eser, Rönesans'ın bilgiye ve klasiğe olan hayranlığının bir manifestosudur.">Hikayeyi Oku &rarr;</button></div></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="page-art-2" class="page">
+            <div class="relative overflow-hidden">
+                <div class="red-cloud-background-localized"></div>
+                <div class="relative z-10">
+                    <h2 class="font-serif text-5xl text-left italic mb-12 text-[var(--main-red)] -ml-6 md:ml-0">Galeri II: Barok ve Romantizm</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
+                        <div class="artwork-card rounded-lg overflow-hidden"><img src="resimler/inciküpelikiz.jpg" class="w-full h-64 object-cover" alt="[İnci Küpeli Kız'ın Resmi]"><div class="p-6"><h3 class="font-serif text-2xl font-bold italic">İnci Küpeli Kız</h3><p class="text-sm text-gray-500 mb-4">Johannes Vermeer</p><button class="story-btn text-sm text-[var(--main-red)] font-semibold" data-title="İnci Küpeli Kız" data-story="Kuzeyin Mona Lisa'sı olarak bilinen bu portre, tronie adı verilen bir karakter etüdüdür. Hikayesi, modelinin kim olduğunun bilinmemesinde yatar; bu onun gizemini artırır. Tablo, sıradan bir Hollandalı kızın, egzotik bir türban ve abartılı büyüklükte bir inci küpe taktığı anı yakalar. Eserin asıl olayı, kızın izleyiciye dönüp bakarken yakaladığı o anlık, geçici ifade, nemli dudakları ve Vermeer'in inci üzerindeki ışığı ustaca kullanmasıdır. Hikayesi, kimliğinde değil, o anlık bakışın gizemindedir.">Hikayeyi Oku &rarr;</button></div></div>
+                        <div class="artwork-card rounded-lg overflow-hidden"><img src="resimler/gecedevriyesi.jpg" class="w-full h-64 object-cover" alt="[Gece Devriyesi'nin Resmi]"><div class="p-6"><h3 class="font-serif text-2xl font-bold italic">Gece Devriyesi</h3><p class="text-sm text-gray-500 mb-4">Rembrandt</p><button class="story-btn text-sm text-[var(--main-red)] font-semibold" data-title="Gece Devriyesi" data-story="Eserin asıl adı bir milis bölüğünün adıdır ve aslında bir grup portresidir. Geleneksel, sıkıcı ve yan yana dizilmiş grup portrelerinin aksine, Rembrandt bu tabloya bir hikaye ve hareket katmıştır. Yüzbaşı Frans Banninck Cocq'un bölüğüne emir verdiği, grubun bir geçit töreni veya göreve hazırlanmak için harekete geçtiği kaotik ve enerjik bir anı tasvir eder. Adının Gece devriyesi olması ise bir yanılgıdır; tablo zamanla vernik yüzünden kararmış, ancak aslında bir gündüz sahnesini göstermektedir. Işık ve gölgenin (chiaroscuro) ustaca kullanımı, figürlere hareket ve derinlik katarak izleyiciyi anın içine çeker. Barok sanatının en dinamik örneklerindendir.">Hikayeyi Oku &rarr;</button></div></div>
+                        <div class="artwork-card rounded-lg overflow-hidden"><img src="https://www.dogubati.com/image/cache/catalog/posterler/Halka%20Yol%20G%C3%B6steren%20%C3%96zg-1024x1024.jpg" class="w-full h-64 object-cover" alt="[Halka Yol Gösteren Özgürlük'ün Resmi]"><div class="p-6"><h3 class="font-serif text-2xl font-bold italic">Halka Yol Gösteren Özgürlük</h3><p class="text-sm text-gray-500 mb-4">Eugène Delacroix</p><button class="story-btn text-sm text-[var(--main-red)] font-semibold" data-title="Halka Yol Gösteren Özgürlük" data-story="1830 Devrimi'ni anlatan bu tablo, Romantizm akımının sembolüdür. Özgürlüğü simgeleyen alegorik kadın figürü, elinde Fransız bayrağıyla barikatların üzerine çıkarak halka öncülük eder. Tutku, fedakarlık ve vatanseverlik bu eserde birleşir.">Hikayeyi Oku &rarr;</button></div></div>
+                        <div class="artwork-card rounded-lg overflow-hidden"><img src="resimler/sisdenizi.jpg" class="w-full h-64 object-cover" alt="[Sis Denizi Üzerinde Yolculuk'un Resmi]"><div class="p-6"><h3 class="font-serif text-2xl font-bold italic">Sis Denizi Üzerinde Yolculuk</h3><p class="text-sm text-gray-500 mb-4">Caspar David Friedrich</p><button class="story-btn text-sm text-[var(--main-red)] font-semibold" data-title="Sis Denizi Üzerinde Yolculuk" data-story="Sırtı izleyiciye dönük figür, doğanın yüceliği ve sonsuzluğu karşısında insanın küçülüğünü ve tefekkür halini yansıtır. Belirli bir olayı değil, bir duyguyu anlatır. Romantik sanatın en derinlikli manzaralarından biri olan eser, bireyin içsel yolculuğunu sembolize eder.">Hikayeyi Oku &rarr;</button></div></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="page-art-3" class="page">
+            <div class="relative overflow-hidden">
+                <div class="red-cloud-background-localized"></div>
+                <div class="relative z-10">
+                    <h2 class="font-serif text-5xl text-left italic mb-12 text-[var(--main-red)] -ml-6 md:ml-0">Galeri III: İzlenimcilik ve Ötesi</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
+                        <div class="artwork-card rounded-lg overflow-hidden"><img src="resimler/yıldızlıgece.jpg" class="w-full h-64 object-cover" alt="[Yıldızlı Gece'nin Resmi]"><div class="p-6"><h3 class="font-serif text-2xl font-bold italic">Yıldızlı Gece</h3><p class="text-sm text-gray-500 mb-4">Vincent van Gogh</p><button class="story-btn text-sm text-[var(--main-red)] font-semibold" data-title="Yıldızlı Gece" data-story="Bu eser, Van Gogh'un Fransa'daki Saint-Rémy akıl hastanesinde kaldığı dönemde yapılmıştır. Tablo, sanatçının odasının penceresinden gördüğü manzaranın (veya daha çok hafızasından ve hayal gücünden yola çıkarak) abartılı ve duygusal bir yorumudur. Hikayesi, Van Gogh'un iç dünyasındaki çalkantıyı, umut arayışını ve doğanın kozmik enerjisini yansıtmasıdır. Gökyüzündeki devasa girdaplar onun yoğun duygularını, sakin köy huzuru, öndeki büyük selvi ağacı ise genellikle yaşam ile ölüm arasındaki (veya yeryüzü ile gökyüzü arasındaki) bağı simgeler.">Hikayeyi Oku &rarr;</button></div></div>
+                        <div class="artwork-card rounded-lg overflow-hidden"><img src="https://www.istanbulsanatevi.com/wp-content/uploads/2022/04/claude-monet-niluferler-02.jpg" class="w-full h-64 object-cover" alt="[Nilüferler Serisi'nin Resmi]"><div class="p-6"><h3 class="font-serif text-2xl font-bold italic">Nilüferler Serisi</h3><p class="text-sm text-gray-500 mb-4">Claude Monet</p><button class="story-btn text-sm text-[var(--main-red)] font-semibold" data-title="Nilüferler Serisi" data-story="Bu, tek bir tablodan çok, Empresyonizmin (İzlenimcilik) kurucusu Monet'nin hayatının son 30 yılını adadığı devasa bir projedir. Sanatçının Giverny'deki evinin bahçesinde özel olarak yarattığı nilüfer havuzuna olan takıntısıdır. Monet, günün farklı saatlerinde ve farklı mevsimlerde, ışığın, renklerin ve gökyüzünün su yüzeyindeki yansımalarını yakalamaya çalıştı. Görme yetisi katarakt nedeniyle bozuldukça eserleri daha da soyutlaştı. Bu seri, doğanın sürekli değişimini ve sanatçının anlık izlenimi yakalama çabasının bir özetidir.">Hikayeyi Ooku &rarr;</button></div></div>
+                        <div class="artwork-card rounded-lg overflow-hidden"><img src="resimler/öpücük.jpg" class="w-full h-64 object-cover" alt="[Öpücük'ün Resmi]"><div class="p-6"><h3 class="font-serif text-2xl font-bold italic">Öpücük</h3><p class="text-sm text-gray-500 mb-4">Gustav Klimt</p><button class="story-btn text-sm text-[var(--main-red)] font-semibold" data-title="Öpücük" data-story="Art Nouveau akımının zirvesi sayılan bu eserde, aşkın kendisinin görkemli bir kutlamasıdır. Çiçekli bir çayırın kenarında birbirine sarılmış bir çiftin, dış dünyadan tamamen koparak aşkın içinde kaybolduğu o anı tasvir eder. Figürler, Bizans mozaiklerini andıran zengin altın varaklarla kaplanmıştır; erkeğin desenleri (sert, köşeli) erkek gücünü, kadının desenleri (dairesel, çiçeksi) kadınsılığı simgeler. Eser, iki ruhun birleştiği o erotik ve kutsal anı, zamansız bir ikon olarak sunar.">Hikayeyi Oku &rarr;</button></div></div>
+                        <div class="artwork-card rounded-lg overflow-hidden"><img src="https://wp.oggusto.com/wp-content/uploads/2025/05/Edvard-Munch-The-Scream.webp" class="w-full h-64 object-cover" alt="[Çığlık'ın Resmi]"><div class="p-6"><h3 class="font-serif text-2xl font-bold italic">Çığlık</h3><p class="text-sm text-gray-500 mb-4">Edvard Munch</p><button class="story-btn text-sm text-[var(--main-red)] font-semibold" data-title="Çığlık" data-story="Dışavurumculuk akımının bu ikonik eseri, sanatçının yaşadığı kişisel bir anksiyete krizine dayanır. Munch, günlüğünde, iki arkadaşıyla bir köprüde yürürken güneşin batışıyla gökyüzünün aniden kan kırmızısına döndüğünü ve o anda doğanın içinden geçen sonsuz bir çığlığı hissettiğini anlatır. Tablodaki cinsiyetsiz, kafatasına benzeyen figür, bu varoluşsal dehşet karşısında kulaklarını tıkayan modern insanın ta kendisidir. Eser, modern yaşamın getirdiği yalnızlık, bunalım ve evrensel kaygının evrensel bir simgesi haline gelmiştir.">Hikayeyi Oku &rarr;</button></div></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="page-art-4" class="page">
+            <div class="relative overflow-hidden">
+                <div class="red-cloud-background-localized"></div>
+                <div class="relative z-10">
+                    <h2 class="font-serif text-5xl text-left italic mb-12 text-[var(--main-red)] -ml-6 md:ml-0">Galeri IV: Modern Sanatın Yüzleri</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
+                        <div class="artwork-card rounded-lg overflow-hidden"><img src="https://artucky.com/cdn/shop/articles/Salvador_Dali_-_Bellegin_Azmi_Tablosu.jpg?v=1655286295" class="w-full h-64 object-cover" alt="[Belleğin Azmi'nin Resmi]"><div class="p-6"><h3 class="font-serif text-2xl font-bold italic">Belleğin Azmi</h3><p class="text-sm text-gray-500 mb-4">Salvador Dalí</p><button class="story-btn text-sm text-[var(--main-red)] font-semibold" data-title="Belleğin Azmi" data-story="Sürrealizmin (Gerçeküstücülük) en ünlü eseri olan bu tablo, Dalí'nin kendi deyimiyle, sıcak güneşte eriyen bir Camembert peyniri görmesinden ilham almıştır. Hikayesi, zamanın katı ve değişmez olmadığı fikridir. Eriyen cep saatleri, zamanın göreceli, akışkan ve rüyalardaki gibi esnek doğasını simgeler. Tablodaki ıssız manzara Dalí'nin bilinçaltını, yerdeki amorf yaratık ise genellikle sanatçının kendi (uykudaki veya rüyadaki) profilini temsil eder. Kısaca bu eser, bilinçaltının ve rüyaların, katı gerçeklik ve zamana karşı zaferidir. Dalí'nin rüyalarından ve bilinçaltından ilham alan bu sahne, izleyiciyi mantığın ötesinde bir gerçekliğe davet eder.">Hikayeyi Oku &rarr;</button></div></div>
+                        <div class="artwork-card rounded-lg overflow-hidden"><img src="https://mir-s3-cdn-cf.behance.net/project_modules/max_1200_webp/0b73c868681015.5b655abc1fb34.jpg" class="w-full h-64 object-cover" alt="[Guernica'nın Resmi]"><div class="p-6"><h3 class="font-serif text-2xl font-bold italic">Guernica</h3><p class="text-sm text-gray-500 mb-4">Pablo Picasso</p><button class="story-btn text-sm text-[var(--main-red)] font-semibold" data-title="Guernica" data-story="Bu devasa tablo, bir hikayeden çok güçlü bir siyasi protestodur. İspanya İç Savaşı sırasında Nazi Almanyası'nın, İspanya'daki Bask kasabası Guernica'yı bombalamasını anlatır. Picasso, bu katliamın dehşetini, acısını ve kaosunu resmetmiştir. Eser, savaşın masum insanlar, kadınlar, çocuklar ve hayvanlar (yaralı at, acı çeken boğa) üzerindeki trajik etkisini gösteren sembollerle doludur. Siyah-beyaz renk kullanımı, bu trajediyi bir gazete haberi gibi çarpıcı ve acil bir şekilde sunar; bu, savaşın acımasızlığına karşı yapılmış evrensel bir haykırıştır. ">Hikayeyi Oku &rarr;</button></div></div>
+                        <div class="artwork-card rounded-lg overflow-hidden"><img src="resimler/kompozisyon.jpg" class="w-full h-64 object-cover" alt="[Kompozisyon VIII'in Resmi]"><div class="p-6"><h3 class="font-serif text-2xl font-bold italic">Kompozisyon VIII</h3><p class="text-sm text-gray-500 mb-4">Wassily Kandinsky</p><button class="story-btn text-sm text-[var(--main-red)] font-semibold" data-title="Kompozisyon VIII" data-story="Soyut sanatın öncüsü Kandinsky, bu eserde renkleri ve geometrik formları müzikal bir uyum içinde kullanır. Her bir şekil ve rengin tinsel bir anlama sahip olduğuna inanan sanatçı, izleyiciye görsel bir senfoni sunar.">Hikayeyi Oku &rarr;</button></div></div>
+                        <div class="artwork-card rounded-lg overflow-hidden"><img src="https://i.milliyet.com.tr/MilliyetSanat640x412/2013/11/29/fft243_mf1245528.Jpeg" class="w-full h-64 object-cover" alt="[No. 5, 1948'in Resmi]"><div class="p-6"><h3 class="font-serif text-2xl font-bold italic">No. 5, 1948</h3><p class="text-sm text-gray-500 mb-4">Jackson Pollock</p><button class="story-btn text-sm text-[var(--main-red)] font-semibold" data-title="No. 5, 1948" data-story="Bu eser, Soyut Dışavurumculuk akımının ve Pollock'un damlatma (drip painting) tekniğinin zirvesidir. Geleneksel bir hikayesi yoktur; hikayenin kendisi, tablonun yapılış sürecidir. Pollock, dev tuvali yere serer, fırçayı tuvale hiç değdirmeden boyaları damlatır, akıtır ve sıçratırdı; bu süreç aksiyon resmi olarak bilinir. Eser, belirli bir nesneyi değil, sanatçının o anki enerjisini, hareketini ve bilinçaltından gelen saf duyguyu temsil eder. İzleyiciye, bir resme değil, bir enerji alanına bakma deneyimi sunar. Resim, sanatçının fiziksel hareketinin ve bilinçaltı enerjisinin doğrudan bir kaydıdır.">Hikayeyi Oku &rarr;</button></div></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="page-art-5" class="page">
+            <div class="relative overflow-hidden">
+                <div class="red-cloud-background-localized"></div>
+                <div class="relative z-10">
+                    <h2 class="font-serif text-5xl text-left italic mb-12 text-[var(--main-red)] -ml-6 md:ml-0">Galeri V: Çağdaş Sanatın Yankıları</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
+                        <div class="artwork-card rounded-lg overflow-hidden"><img src="https://www.thebroad.org/sites/default/files/styles/webp_convert_only/public/art/basquiat_untitled.jpg.webp?itok=2ev8K24x" class="w-full h-64 object-cover" alt="[Untitled (1982) eserinin resmi]"><div class="p-6"><h3 class="font-serif text-2xl font-bold italic">Untitled (1982)</h3><p class="text-sm text-gray-500 mb-4">Jean-Michel Basquiat</p><button class="story-btn text-sm text-[var(--main-red)] font-semibold" data-title="Untitled (1982)" data-story="Bu eser, Basquiat'ın ham enerjisinin ve sokak sanatının yüksek sanata girişinin bir sembolüdür. Bir hikayeden çok, sanatçının 1980'ler New York'unun kaotik enerjisini, kendi Afrikalı-Amerikalı kimliğini ve içsel çatışmalarını yansıttığı bir otoportredir. Tablodaki kafatası benzeri yüz, hem yaşamı hem de ölümü, hem gücü hem de acıyı temsil eder. Eserin asıl hikayesi, 2017'de rekor bir fiyata (110.5 milyon $) satılarak Basquiat'ı tarihteki en pahalı Amerikan sanatçısı yapması ve sokak sanatının sanat dünyasındaki yerini kalıcı olarak değiştirmesidir. Kafatası figürü, sanatçının kimlik, ölüm ve aidiyet temalarını sorguladığı güçlü bir ifadedir.">Hikayeyi Oku &rarr;</button></div></div>
+                        <div class="artwork-card rounded-lg overflow-hidden"><img src="https://www.artmajeur.com/media/cache/resolve/standard/s/a/samuel/blog/girl-with-balloon-by-banksy.jpeg" class="w-full h-64 object-cover" alt="[Kırmızı Balonlu Kız eserinin resmi]"><div class="p-6"><h3 class="font-serif text-2xl font-bold italic">Kırmızı Balonlu Kız</h3><p class="text-sm text-gray-500 mb-4">Banksy</p><button class="story-btn text-sm text-[var(--main-red)] font-semibold" data-title="Kırmızı Balonlu Kız" data-story="Bu eser, ilk olarak Londra'da bir sokak duvar resmi (grafiti) olarak ortaya çıktı. Küçük bir kızın, rüzgarda elinden kaçırdığı kalp şeklindeki kırmızı bir balona uzanışını gösterir. Görüntü, masumiyetin kaybını, umudu veya elden kaçan aşkı simgeler. Eserin en çarpıcı hikayesi 2018'de yaşandı: Tablonun bir versiyonu müzayedede satıldığı an, Banksy'nin çerçevenin içine gizlediği bir kağıt öğütme mekanizması devreye girdi ve eser kendini kısmen yok etti. Banksy bu olayı, sanat piyasasını eleştiren bir performans sanatı olarak tasarlamıştı.">Hikayeyi Oku &rarr;</button></div></div>
+                        <div class="artwork-card rounded-lg overflow-hidden"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSd-hXTjMbcwY5c_LqRD8OMPDvVwWDMqt7lRA&s" class="w-full h-64 object-cover" alt="[Infinity Mirror Room enstalasyonunun resmi]"><div class="p-6"><h3 class="font-serif text-2xl font-bold italic">Infinity Mirror Room</h3><p class="text-sm text-gray-500 mb-4">Yayoi Kusama</p><button class="story-btn text-sm text-[var(--main-red)] font-semibold" data-title="Infinity Mirror Room" data-story="Bu tek bir eser değil, Japon sanatçı Kusama'nın en ünlü deneyimsel enstalasyon (yerleştirme sanatı) serisidir. Hikayesi, izleyiciyi sanatın içine dahil etmektir. Kusama, duvarları, zemini ve tavanı aynalarla kaplı küçük odalar yaratır ve bu odaları yüzlerce renkli LED ışıkla veya benekli nesnelerle (genellikle kabaklar) doldurur. İzleyici odaya girdiğinde, yansımalar sayesinde kendini sonsuz bir evrende, sonsuz ışık arasında bulur. Eser, izleyiciye kendi varlığının hem sonsuzluk içinde kayboluşunu hem de evrenin bir parçası olduğunu hissettirir.">Hikayeyi Oku &rarr;</button></div></div>
+                        <div class="artwork-card rounded-lg overflow-hidden"><img src="resimler/aycekirdekleri.jpg" class="w-full h-64 object-cover" alt="[Ay Çekirdekleri enstalasyonunun resmi]"><div class="p-6"><h3 class="font-serif text-2xl font-bold italic">Ay Çekirdekleri</h3><p class="text-sm text-gray-500 mb-4">Ai Weiwei</p><button class="story-btn text-sm text-[var(--main-red)] font-semibold" data-title="Ay Çekirdekleri" data-story="Ai Weiwei'nin bu devasa enstalasyonu, el yapımı milyonlarca porselen ay çekirdeğinden oluşur. Her bir çekirdek bireyi, bütün ise kitleyi temsil eder. Eser, 'Made in China' algısını sorgularken, bireysellik ve kolektif kimlik üzerine güçlü bir politik yorum sunar.">Hikayeyi Oku &rarr;</button></div></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        
+
+<section id="page-artist-1" class="page">
+            <div class="relative overflow-hidden">
+                <div class="red-cloud-background-localized"></div>
+                <div class="relative z-10">
+                    <h2 class="font-serif text-5xl text-left italic mb-12 text-[var(--main-red)] -ml-6 md:ml-0">Portreler I: Rönesans Dehaları</h2>
+                    <div class="grid md:grid-cols-2 gap-12">
+                        <div class="artist-card-wrapper">
+                            <div class="artist-card">
+                                <img class="artist-image-trigger w-48 h-48 rounded-full mx-auto object-cover" src="https://wp.oggusto.com/wp-content/uploads/2023/03/leonardo-da-vinci-hayati-eserleri-ve-bilinmeyenleri-1-1.webp" alt="[Leonardo da Vinci'nin Portresi]">
+                                <h3 class="font-serif text-3xl font-bold mt-6 italic">Leonardo da Vinci</h3>
+                                <p class="mt-2 text-sm text-gray-500">1452 - 1519</p>
+                                <p class="mt-4 text-gray-600 max-w-lg mx-auto">Sadece bir ressam değil, aynı zamanda bir bilim insanı, mucit ve düşünürdü. İnsan anatomisi üzerine yaptığı çalışmalar ve 'sfumato' tekniğindeki ustalığı, onu tarihin en çok yönlü dehası yapmıştır.</p>
+                            </div>
+                        </div>
+                        <div class="artist-card-wrapper">
+                            <div class="artist-card">
+                                <img class="artist-image-trigger w-48 h-48 rounded-full mx-auto object-cover" src="resimler/michelangelo.jpg" data-src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Michelangelo_Daniele_da_Volterra_%28dettaglio%29.jpg/800px-Michelangelo_Daniele_da_Volterra_%28dettaglio%29.jpg" alt="[Michelangelo'nun Portresi]">
+                                <h3 class="font-serif text-3xl font-bold mt-6 italic">Michelangelo</h3>
+                                <p class="mt-2 text-sm text-gray-500">1475 - 1564</p>
+                                <p class="mt-4 text-gray-600 max-w-lg mx-auto">Heykeltıraş, ressam, mimar ve şair. Davut heykeli ve Sistina Şapeli tavanı gibi eserleriyle insan formunun gücünü ve Tanrısal güzelliğini yansıtmıştır. Tutkulu ve ödün vermez karakteri sanatına yansımıştır.</p>
+                            </div>
+                        </div>
+                        <div class="artist-card-wrapper md:col-span-2">
+                            <div class="artist-card">
+                                <img class="artist-image-trigger w-48 h-48 rounded-full mx-auto object-cover" src="https://resimbiterken.wordpress.com/wp-content/uploads/2014/01/raphael1.jpg" data-src="" alt="[Raphael'in Portresi]">
+                                <h3 class="font-serif text-3xl font-bold mt-6 italic">Raphael</h3>
+                                <p class="mt-2 text-sm text-gray-500">1483 - 1520</p>
+                                <p class="mt-4 text-gray-600 max-w-lg mx-auto">Yüksek Rönesans'ın uyum ve zarafet ustası. Eserleri, kompozisyonundaki denge, renklerindeki berraklık ve figürlerindeki dingin güzellikle tanınır. Atina Okulu, onun en büyük başyapıtlarından biridir.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="page-artist-2" class="page">
+            <div class="relative overflow-hidden">
+                <div class="red-cloud-background-localized"></div>
+                <div class="relative z-10">
+                    <h2 class="font-serif text-5xl text-left italic mb-12 text-[var(--main-red)] -ml-6 md:ml-0">Portreler II: Barok Ustaları</h2>
+                    <div class="grid md:grid-cols-2 gap-12">
+                        <div class="artist-card-wrapper">
+                            <div class="artist-card">
+                                <img class="artist-image-trigger w-48 h-48 rounded-full mx-auto object-cover" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Rembrandt_van_Rijn_-_Self-Portrait_-_Google_Art_Project.jpg/250px-Rembrandt_van_Rijn_-_Self-Portrait_-_Google_Art_Project.jpg" data-src="" alt="[Rembrandt'ın Portresi]">
+                                <h3 class="font-serif text-3xl font-bold mt-6 italic">Rembrandt</h3>
+                                <p class="mt-2 text-sm text-gray-500">1606 - 1669</p>
+                                <p class="mt-4 text-gray-600 max-w-lg mx-auto">Işığın ve gölgenin şairi olarak bilinen Hollandalı usta. Özellikle otoportreleri, insan ruhunun derinliklerine ve yaşlanmanın getirdiği bilgeliğe dair samimi birer incelemedir. </p>
+                            </div>
+                        </div>
+                        <div class="artist-card-wrapper">
+                            <div class="artist-card">
+                                <img class="artist-image-trigger w-48 h-48 rounded-full mx-auto object-cover" src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Bild-Ottavio_Leoni%2C_Caravaggio.jpg/960px-Bild-Ottavio_Leoni%2C_Caravaggio.jpg" data-src="" alt="[Caravaggio'nun Portresi]">
+                                <h3 class="font-serif text-3xl font-bold mt-6 italic">Caravaggio</h3>
+                                <p class="mt-2 text-sm text-gray-500">1571 - 1610</p>
+                                <p class="mt-4 text-gray-600 max-w-lg mx-auto">Barok sanatın dramatik ve isyankar dehası. Tenebrizm (güçlü ışık-gölge zıtlığı) tekniğiyle dini sahneleri sokaktaki sıradan insanların gerçekçiliğiyle birleştirerek sanatta bir devrim yarattı.</p>
+                            </div>
+                        </div>
+                        <div class="artist-card-wrapper md:col-span-2">
+                            <div class="artist-card">
+                                <img class="artist-image-trigger w-48 h-48 rounded-full mx-auto object-cover" src="https://www.biyografiler.com/personpicture/janvermeer.jpg" data-src="" alt="[Johannes Vermeer'in Portresi]">
+                                <h3 class="font-serif text-3xl font-bold mt-6 italic">Johannes Vermeer</h3>
+                                <p class="mt-2 text-sm text-gray-500">1632 - 1675</p>
+                                <p class="mt-4 text-gray-600 max-w-lg mx-auto">Gündelik hayatın sessiz ve büyülü anlarını resmeden Hollandalı sanatçı. Az sayıda eser üretmiş olmasına rağmen, ışığı kullanmadaki ustalığı ve kompozisyonlarındaki dingin atmosfer ile tanınır.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="page-artist-3" class="page">
+             <div class="relative overflow-hidden">
+                <div class="red-cloud-background-localized"></div>
+                <div class="relative z-10">
+                    <h2 class="font-serif text-5xl text-left italic mb-12 text-[var(--main-red)] -ml-6 md:ml-0">Portreler III: İzlenimciliğin Öncüleri</h2>
+                    <div class="grid md:grid-cols-2 gap-12">
+                        <div class="artist-card-wrapper">
+                            <div class="artist-card">
+                                <img class="artist-image-trigger w-48 h-48 rounded-full mx-auto object-cover" src="resimler/ClaudeMonet.jpg" data-src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Claude_Monet_1899_Nadar_crop.jpg/800px-Claude_Monet_1899_Nadar_crop.jpg" alt="[Claude Monet'nin Portresi]">
+                                <h3 class="font-serif text-3xl font-bold mt-6 italic">Claude Monet</h3>
+                                <p class="mt-2 text-sm text-gray-500">1840 - 1926</p>
+                                <p class="mt-4 text-gray-600 max-w-lg mx-auto">İzlenimcilik akımına adını veren sanatçı. Amacı, nesneleri değil, ışığın nesneler üzerindeki anlık etkisini ve izlenimini yakalamaktı. Nilüferler serisi bu felsefenin zirvesidir.</p>
+                            </div>
+                        </div>
+                        <div class="artist-card-wrapper">
+                            <div class="artist-card">
+                                <img class="artist-image-trigger w-48 h-48 rounded-full mx-auto object-cover" src="resimler/VincentvanGogh.jpg" data-src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Vincent_van_Gogh_-_Self-Portrait_-_Google_Art_Project.jpg/800px-Vincent_van_Gogh_-_Self-Portrait_-_Google_Art_Project.jpg" alt="[Vincent van Gogh'un Portresi]">
+                                <h3 class="font-serif text-3xl font-bold mt-6 italic">Vincent van Gogh</h3>
+                                <p class="mt-2 text-sm text-gray-500">1853 - 1890</p>
+                                <p class="mt-4 text-gray-600 max-w-lg mx-auto">Duygularını kalın boya katmanları ve dinamik fırça darbeleriyle ifade eden Post-İzlenimci sanatçı. Hayatı boyunca hak ettiği değeri göremese de, sanatı bugün milyonlara ilham vermektedir.</p>
+                            </div>
+                        </div>
+                        <div class="artist-card-wrapper md:col-span-2">
+                            <div class="artist-card">
+                                <img class="artist-image-trigger w-48 h-48 rounded-full mx-auto object-cover" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRg9-dcDHzOc2B5Rzpib4Hea5RO5oICKS9G8A&s" data-src="" alt="[Pierre-Auguste Renoir'ın Portresi]">
+                                <h3 class="font-serif text-3xl font-bold mt-6 italic">Pierre-Auguste Renoir</h3>
+                                <p class="mt-2 text-sm text-gray-500">1841 - 1919</p>
+                                <p class="mt-4 text-gray-600 max-w-lg mx-auto">İzlenimciliğin en neşeli ve hayat dolu ressamı. Özellikle Paris sosyal yaşamını, kadın figürlerini ve güzelliği resmettiği tablolarıyla tanınır. Fırçasından renk ve mutluluk akar.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="page-artist-4" class="page">
+             <div class="relative overflow-hidden">
+                <div class="red-cloud-background-localized"></div>
+                <div class="relative z-10">
+                    <h2 class="font-serif text-5xl text-left italic mb-12 text-[var(--main-red)] -ml-6 md:ml-0">Portreler IV: Sürrealizm ve Kübizm</h2>
+                    <div class="grid md:grid-cols-2 gap-12">
+                        <div class="artist-card-wrapper">
+                            <div class="artist-card">
+                                <img class="artist-image-trigger w-48 h-48 rounded-full mx-auto object-cover" src="resimler/salvador dali.jpg.jpg" data-src="" alt="[Salvador Dalí'nin Portresi]">
+                                <h3 class="font-serif text-3xl font-bold mt-6 italic">Salvador Dalí</h3>
+                                <p class="mt-2 text-sm text-gray-500">1904 - 1989</p>
+                                <p class="mt-4 text-gray-600 max-w-lg mx-auto">Sürrealizmin eksantrik ve dahi yüzü. Bilinçaltını, rüyaları ve tuhaf imgeleri titiz bir teknikle resmederek şaşırtıcı ve unutulmaz eserler yarattı.</p>
+                            </div>
+                        </div>
+                        <div class="artist-card-wrapper">
+                            <div class="artist-card">
+                                <img class="artist-image-trigger w-48 h-48 rounded-full mx-auto object-cover" src="resimler/PabloPicasso.jpg" data-src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Pablo_picasso_1.jpg/800px-Pablo_picasso_1.jpg" alt="[Pablo Picasso'nun Portresi]">
+                                <h3 class="font-serif text-3xl font-bold mt-6 italic">Pablo Picasso</h3>
+                                <p class="mt-2 text-sm text-gray-500">1881 - 1973</p>
+                                <p class="mt-4 text-gray-600 max-w-lg mx-auto">20. yüzyıl sanatının en etkili isimlerinden biri ve Kübizm'in kurucusu. Nesneleri birden çok açıdan aynı anda göstererek geleneksel perspektif kurallarını yıktı ve sanatta yeni bir çağ başlattı.</p>
+                            </div>
+                        </div>
+                        <div class="artist-card-wrapper md:col-span-2">
+                            <div class="artist-card">
+                                <img class="artist-image-trigger w-48 h-48 rounded-full mx-auto object-cover" src="resimler/FridaKahlo.jpg" data-src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Frida_Kahlo%2C_by_Guillermo_Kahlo.jpg/800px-Frida_Kahlo%2C_by_Guillermo_Kahlo.jpg" alt="[Frida Kahlo'nun Portresi]">
+                                <h3 class="font-serif text-3xl font-bold mt-6 italic">Frida Kahlo</h3>
+                                <p class="mt-2 text-sm text-gray-500">1907 - 1954</p>
+                                <p class="mt-4 text-gray-600 max-w-lg mx-auto">Meksikalı ressam, acılarını, tutkularını ve kimliğini cesur otoportrelerle ifade etti. Gerçeküstü unsurları Meksika halk sanatıyla birleştirerek kendine özgü, güçlü bir dil oluşturdu.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="page-artist-5" class="page">
+             <div class="relative overflow-hidden">
+                <div class="red-cloud-background-localized"></div>
+                <div class="relative z-10">
+                    <h2 class="font-serif text-5xl text-left italic mb-12 text-[var(--main-red)] -ml-6 md:ml-0">Portreler V: Soyut ve Pop Art</h2>
+                    <div class="grid md:grid-cols-2 gap-12">
+                        <div class="artist-card-wrapper">
+                            <div class="artist-card">
+                                <img class="artist-image-trigger w-48 h-48 rounded-full mx-auto object-cover" src="https://www.wassily-kandinsky.org/assets/img/wassily-kandinsky.jpg" data-src="" alt="[Wassily Kandinsky'nin Portresi]">
+                                <h3 class="font-serif text-3xl font-bold mt-6 italic">Wassily Kandinsky</h3>
+                                <p class="mt-2 text-sm text-gray-500">1866 - 1944</p>
+                                <p class="mt-4 text-gray-600 max-w-lg mx-auto">Soyut sanatın babası olarak kabul edilir. Renklerin ve formların, tıpkı müzik notaları gibi, doğrudan insan ruhuna hitap eden tinsel bir gücü olduğuna inanıyordu.</p>
+                            </div>
+                        </div>
+                        <div class="artist-card-wrapper">
+                            <div class="artist-card">
+                                <img class="artist-image-trigger w-48 h-48 rounded-full mx-auto object-cover" src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Jackson_Pollock_%28cropped%29.jpg/250px-Jackson_Pollock_%28cropped%29.jpg" data-src="" alt="[Jackson Pollock'un Portresi]">
+                                <h3 class="font-serif text-3xl font-bold mt-6 italic">Jackson Pollock</h3>
+                                <p class="mt-2 text-sm text-gray-500">1912 - 1956</p>
+                                <p class="mt-4 text-gray-600 max-w-lg mx-auto">Soyut Dışavurumculuk akımının en radikal figürü. "Damlama" tekniğiyle, tuvali bir arena gibi kullanarak resim yapma eyleminin kendisini sanat eserine dönüştürdü.</p>
+                            </div>
+                        </div>
+                        <div class="artist-card-wrapper md:col-span-2">
+                            <div class="artist-card">
+                                <img class="artist-image-trigger w-48 h-48 rounded-full mx-auto object-cover" src="resimler/AndyWarhol.jpg" data-src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/Andy_Warhol_by_Jack_Mitchell.jpg/800px-Andy_Warhol_by_Jack_Mitchell.jpg" alt="[Andy Warhol'un Portresi]">
+                                <h3 class="font-serif text-3xl font-bold mt-6 italic">Andy Warhol</h3>
+                                <p class="mt-2 text-sm text-gray-500">1928 - 1987</p>
+                                <p class="mt-4 text-gray-600 max-w-lg mx-auto">Pop Art'ın lideri. Tüketim kültürünü, ünlüleri ve seri üretimi sanatının merkezine alarak "yüksek sanat" ile "popüler kültür" arasındaki sınırları bulanıklaştırdı.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- === MÜZELER SAYFALARI (4 Sayfa) === --><section id="page-museum-1" class="page">
+            <img src="https://www.interbustur.com/wp-content/uploads/2016/06/louvre-m%C3%BCzesi.jpg" class="rounded-lg shadow-xl w-full h-100 object-cover mb-12" alt="[Louvre Müzesi'nin cam piramidi]">
+            <h2 class="font-serif text-6xl italic mb-4 text-[var(--main-red)]">Louvre Müzesi</h2>
+            <p class="text-xl text-gray-500 mb-8">Paris, Fransa</p>
+            <div class="grid lg:grid-cols-3 gap-12">
+                <div class="lg:col-span-2 text-lg leading-relaxed space-y-4">
+                    <p>Aslen 12. yüzyılda bir kale olarak inşa edilen Louvre Sarayı, yüzyıllar boyunca Fransız krallarının ikametgahı oldu. Fransız Devrimi sırasında, 1793'te kapılarını bir müze olarak halka açtı ve o günden beri dünyanın en büyük ve en çok ziyaret edilen sanat müzesi haline geldi.</p>
+                    <p>Antik Mısır'dan 19. yüzyıl Avrupa sanatına uzanan devasa koleksiyonu, insanlık tarihinin sanatsal bir özetini sunar. Koridorlarında, Leonardo da Vinci'nin esrarengiz <strong>Mona Lisa</strong>'sı, antik Yunan heykel sanatının zaferi <strong>Semadirek Kanatlı Zaferi</strong> ve <strong>Venus de Milo</strong> gibi paha biçilmez hazinelerle karşılaşırsınız.</p>
+                </div>
+                <div class="lg:col-span-1">
+                     <img src="resimler/louvre.jpg" class="rounded-lg shadow-xl w-full h-auto object-cover" alt="[Louvre'un içindeki heykeller]">
+                </div>
+            </div>
+        </section>
+        <section id="page-museum-2" class="page">
+            <img src="https://img-s3.onedio.com/id-6454f5ecee99d2ecee6eea02/rev-0/w-600/h-375/f-jpg/s-139811a1602a505c350353ef0dc950223d07668c.jpg" class="rounded-lg shadow-xl w-full h-100 object-cover mb-12" alt="[MoMA'nın dış cephesi]">
+            <h2 class="font-serif text-6xl italic mb-4 text-[var(--main-red)]">MoMA (Modern Sanat Müzesi)</h2>
+            <p class="text-xl text-gray-500 mb-8">New York, ABD</p>
+            <div class="grid lg:grid-cols-3 gap-12">
+                <div class="lg:col-span-2 text-lg leading-relaxed space-y-4">
+                    <p>1929'da, Abby Aldrich Rockefeller gibi üç sanatsever kadının vizyonuyla kurulan MoMA, modern sanata adanmış ilk müzelerden biriydi. Amacı, zamanın en yenilikçi ve avangart sanat eserlerini toplayıp sergilemekti ve bu misyonunu bugün de sürdürmektedir.</p>
+                    <p>Koleksiyonu, modernizmin gelişimini gözler önüne serer. Vincent van Gogh'un çalkantılı <strong>Yıldızlı Gece</strong>'si, Picasso'nun sanatı sonsuza dek değiştiren <strong>Avignonlu Kızlar</strong>'ı, Salvador Dalí'nin rüya gibi <strong>Belleğin Azmi</strong> ve Andy Warhol'un <strong>Campbell Çorba Kutuları</strong> gibi devrimci eserler bu müzenin duvarlarını süsler.</p>
+                </div>
+                 <div class="lg:col-span-1">
+                     <img src="https://www.istanbulsanatevi.com/wp-content/uploads/2019/06/museum-of-modern-art-new-york-galeri-gorunumu.jpg" alt="[müzze]">
+                </div>
+            </div>
+        </section>
+        <section id="page-museum-3" class="page">
+             <img src="https://uffizigallerytickets.tours/wp-content/uploads/2024/12/uffizi-gallery-art-2.jpg" class="rounded-lg shadow-xl w-full h-100 object-cover mb-12" alt="[Uffizi Galerisi]">
+             <h2 class="font-serif text-6xl italic mb-4 text-[var(--main-red)]">Uffizi Galerisi</h2>
+            <p class="text-xl text-gray-500 mb-8">Floransa, İtalya</p>
+            <div class="grid lg:grid-cols-3 gap-12">
+                <div class="lg:col-span-2 text-lg leading-relaxed space-y-4">
+                    <p>Rönesans'ın kalbi Floransa'da yer alan Uffizi, dünyanın en eski ve en önemli sanat müzelerinden biridir. 16. yüzyılda, Floransa'nın güçlü Medici ailesi için bir idari ofis ("uffizi") olarak inşa edilen yapı, zamanla ailenin paha biçilmez sanat koleksiyonuna ev sahipliği yapmaya başladı ve 1765'te halka açıldı.</p>
+                    <p>Uffizi'yi gezmek, Rönesans'ın doğuşuna ve yükselişine tanıklık etmektir. Botticelli'nin zarif <strong>Venüs'ün Doğuşu</strong> ve <strong>İlkbahar</strong> tablolarından, Leonardo da Vinci ve Michelangelo'nun erken dönem eserlerine kadar İtalyan ustalarının başyapıtları burada sergilenmektedir.</p>
+                </div>
+                <div class="lg:col-span-1">
+                    <img src="https://artdogistanbul.com/wp-content/uploads/2022/04/1.-POST-Gorsel-2-5.jpg" class="rounded-lg shadow-xl w-full h-auto object-cover" alt="[uffizi müzesi]">
+                </div>
+            </div>
+        </section>
+        <section id="page-museum-4" class="page">
+            <img src="https://cdn-imgix.headout.com/media/images/07ebb7b130e6b4fa08585bc9cd989185-Prado-Museum.jpg?auto=format&q=90&crop=faces&fit=crop" class="rounded-lg shadow-xl w-full h-100 object-cover mb-12" alt="[Prado Müzesi'nin dışarıdan görünümü]">
+            <h2 class="font-serif text-6xl italic mb-4 text-[var(--main-red)]">Prado Müzesi</h2>
+            <p class="text-xl text-gray-500 mb-8">Madrid, İspanya</p>
+            <div class="grid lg:grid-cols-3 gap-12">
+               <div class="lg:col-span-2 text-lg leading-relaxed space-y-4">
+                    <p>1819'da Kraliyet Resim ve Heykel Müzesi olarak kapılarını açan Prado, başlangıçta İspanyol kraliyet koleksiyonunu barındırıyordu. Neoklasik tarzdaki görkemli binası, 18. yüzyılda bir doğa tarihi müzesi olarak tasarlanmış, ancak daha sonra sanatın evi olmuştur.</p>
+                    <p>Prado, özellikle İspanyol sanatının altın çağına odaklanır. Diego Velázquez'in başyapıtı <strong>Nedimeler (Las Meninas)</strong>, Francisco Goya'nın hem aydınlık portreleri hem de karanlık "Siyah Resimler" serisi ve El Greco'nun mistik figürleri müzenin en değerli parçalarıdır. Ayrıca Hieronymus Bosch'un fantastik eseri <strong>Dünyevi Zevkler Bahçesi</strong> de burada bulunur.</p>
+                </div>
+                <div class="lg:col-span-1">
+                    <img src="https://ivasanat.com/blog/wp-content/uploads/2024/11/prado-muzesi.jpeg" class="rounded-lg shadow-xl w-full h-auto object-cover" alt="[müze]">
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- === HİKAYE MODAL'I (Açılır Pencere) === --><div id="story-modal" class="modal fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-6 hidden z-50">
+        <div class="modal-content bg-white rounded-lg shadow-2xl max-w-2xl w-full p-8 relative">
+            <button id="close-story-modal-btn" class="absolute top-4 right-6 text-3xl text-gray-400 hover:text-gray-800">&times;</button>
+            <h2 id="modal-title" class="font-serif text-4xl font-bold mb-4 italic"></h2>
+            <p id="modal-story" class="text-gray-700 leading-relaxed"></p>
+        </div>
+    </div>
+    
+    <!-- === SANATÇI RESİM MODAL'I === --><div id="image-modal" class="modal fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center p-6 hidden z-50">
+        <div class="relative modal-content">
+             <div class="bg-white rounded-full shadow-2xl w-80 h-80 md:w-96 md:h-96 overflow-hidden">
+                <img id="modal-image" src="" alt="Büyütülmüş Sanatçı Portresi" class="w-full h-full object-cover">
+            </div>
+            <button id="close-image-modal-btn" class="absolute -top-2 -right-2 text-3xl text-white bg-[var(--main-red)] rounded-full w-10 h-10 flex items-center justify-center leading-none">&times;</button>
+        </div>
+    </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Gerekli tüm elementleri bir kere seç
+            const pages = document.querySelectorAll('.page');
+            const navTriggers = document.querySelectorAll('.nav-trigger');
+            const menuToggles = document.querySelectorAll('.menu-toggle');
+            const submenus = document.querySelectorAll('.submenu');
+            const discoverButton = document.getElementById('discover-button');
+            
+            const storyModal = document.getElementById('story-modal');
+            const storyModalTitle = document.getElementById('modal-title');
+            const storyModalText = document.getElementById('modal-story');
+            const closeStoryModalBtn = document.getElementById('close-story-modal-btn');
+
+            const imageModal = document.getElementById('image-modal');
+            const modalImage = document.getElementById('modal-image');
+            const closeImageModalBtn = document.getElementById('close-image-modal-btn');
+
+            // --- Navigasyon Fonksiyonları ---
+            function showPage(pageId) {
+                pages.forEach(page => page.classList.toggle('active', page.id === pageId));
+                
+                // Tüm nav-link ve submenu linklerindeki aktifliğini gider
+                document.querySelectorAll('.nav-link, .submenu a').forEach(l => l.classList.remove('active'));
+
+                // İlgili linkleri aktif yap
+                const activeLinks = document.querySelectorAll(`.nav-trigger[data-page="${pageId}"]`);
+                activeLinks.forEach(link => {
+                    link.classList.add('active');
+                    const parentMenu = link.closest('.has-submenu');
+                    if (parentMenu) {
+                        parentMenu.querySelector('.nav-link').classList.add('active');
+                    }
+                });
+                
+                window.scrollTo(0, 0);
+            }
+            
+            // Alt menü linkleri için navigasyon
+            navTriggers.forEach(link => {
+                const handleNavigation = (event) => {
+                    event.preventDefault();
+                    event.stopPropagation(); // Diğer click event'lerini tetiklemesini önle
+                    showPage(link.dataset.page);
+                    // Menüyü kapat
+                    submenus.forEach(s => s.classList.remove('is-open'));
+                };
+                link.addEventListener('click', handleNavigation);
+                link.addEventListener('contextmenu', handleNavigation);
+            });
+            
+            // Ana menü başlıkları için alt menüyü aç/kapat
+            menuToggles.forEach(toggle => {
+                toggle.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    const currentSubmenu = toggle.nextElementSibling;
+                    const wasOpen = currentSubmenu.classList.contains('is-open');
+                    // Önce hepsini kapat
+                    submenus.forEach(s => s.classList.remove('is-open'));
+                    // Eğer kapalıysa, sadece bunu aç
+                    if (!wasOpen) {
+                        currentSubmenu.classList.add('is-open');
+                    }
+                });
+            });
+
+            // "Galeriyi Keşfet" butonu
+            if (discoverButton) {
+                discoverButton.addEventListener('click', () => showPage('page-art-1'));
+            }
+
+            // --- Modal Fonksiyonları ---
+            function openStoryModal(title, story) {
+                storyModalTitle.textContent = title;
+                storyModalText.textContent = story;
+                storyModal.classList.remove('hidden');
+            }
+
+            function closeStoryModal() {
+                storyModal.classList.add('hidden');
+            }
+            
+            function openImageModal(src) {
+                modalImage.src = src;
+                imageModal.classList.remove('hidden');
+            }
+
+            function closeImageModal() {
+                modalImage.src = ""; // Resmi temizle
+                imageModal.classList.add('hidden');
+            }
+
+            // Olayları body ve window'a delege etme
+            document.body.addEventListener('click', (e) => {
+                // Herhangi bir yere tıklayınca açık menüleri kapat
+                submenus.forEach(s => s.classList.remove('is-open'));
+
+                if (e.target.matches('.story-btn')) {
+                    openStoryModal(e.target.dataset.title, e.target.dataset.story);
+                }
+                if (e.target.matches('.artist-image-trigger')) {
+                    openImageModal(e.target.dataset.src || e.target.src);
+                }
+                if (e.target === storyModal) closeStoryModal();
+                if (e.target === imageModal) closeImageModal();
+            });
+            
+            closeStoryModalBtn.addEventListener('click', closeStoryModal);
+            closeImageModalBtn.addEventListener('click', closeImageModal);
+
+            window.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    if (!storyModal.classList.contains('hidden')) closeStoryModal();
+                    if (!imageModal.classList.contains('hidden')) closeImageModal();
+                }
+            });
+
+            // Başlangıç sayfasını yükle
+            showPage('page-home');
+        });
+    </script>
+</body>
+</html>
+
