@@ -183,37 +183,37 @@
     <header class="sticky top-0 w-full z-50 border-b border-gray-200">
         <div class="container mx-auto px-6 py-4 flex justify-between items-center">
             <div class="flex-1 flex justify-start">
-                <a class="font-serif text-4xl font-bold text-gray-800 nav-trigger" data-page="page-home">Arthea</a>
+                <a class="font-serif text-4xl font-bold text-gray-800 nav-trigger" href="#page-home" data-page="page-home">Arthea</a>
             </div>
             <nav class="hidden md:flex items-center space-x-8 text-base tracking-widest uppercase">
-                <a class="nav-link nav-trigger" data-page="page-home">Giriş</a>
+                <a class="nav-link nav-trigger" href="#page-home" data-page="page-home">Giriş</a>
                 <div class="has-submenu relative">
-                    <a class="nav-link menu-toggle">Sanat Eserleri</a>
-                    <div class="submenu mt-5 p-4 rounded shadow-lg space-y-2 w-48">
-                        <a class="block px-2 py-1 hover:text-red-800 rounded nav-trigger" data-page="page-art-1">Galeri I</a>
-                        <a class="block px-2 py-1 hover:text-red-800 rounded nav-trigger" data-page="page-art-2">Galeri II</a>
-                        <a class="block px-2 py-1 hover:text-red-800 rounded nav-trigger" data-page="page-art-3">Galeri III</a>
-                        <a class="block px-2 py-1 hover:text-red-800 rounded nav-trigger" data-page="page-art-4">Galeri IV</a>
-                        <a class="block px-2 py-1 hover:text-red-800 rounded nav-trigger" data-page="page-art-5">Galeri V</a>
+                    <button type="button" class="nav-link menu-toggle uppercase tracking-widest" aria-expanded="false" aria-controls="submenu-art">Sanat Eserleri</button>
+                    <div id="submenu-art" class="submenu mt-5 p-4 rounded shadow-lg space-y-2 w-48">
+                        <a class="block px-2 py-1 hover:text-red-800 rounded nav-trigger" href="#page-art-1" data-page="page-art-1">Galeri I</a>
+                        <a class="block px-2 py-1 hover:text-red-800 rounded nav-trigger" href="#page-art-2" data-page="page-art-2">Galeri II</a>
+                        <a class="block px-2 py-1 hover:text-red-800 rounded nav-trigger" href="#page-art-3" data-page="page-art-3">Galeri III</a>
+                        <a class="block px-2 py-1 hover:text-red-800 rounded nav-trigger" href="#page-art-4" data-page="page-art-4">Galeri IV</a>
+                        <a class="block px-2 py-1 hover:text-red-800 rounded nav-trigger" href="#page-art-5" data-page="page-art-5">Galeri V</a>
                     </div>
                 </div>
                 <div class="has-submenu relative">
-                    <a class="nav-link menu-toggle">Sanatçılar</a>
-                    <div class="submenu mt-5 p-4 rounded shadow-lg space-y-2 w-48">
-                        <a class="block px-2 py-1 hover:text-red-800 rounded nav-trigger" data-page="page-artist-1">Portreler I</a>
-                        <a class="block px-2 py-1 hover:text-red-800 rounded nav-trigger" data-page="page-artist-2">Portreler II</a>
-                        <a class="block px-2 py-1 hover:text-red-800 rounded nav-trigger" data-page="page-artist-3">Portreler III</a>
-                        <a class="block px-2 py-1 hover:text-red-800 rounded nav-trigger" data-page="page-artist-4">Portreler IV</a>
-                        <a class="block px-2 py-1 hover:text-red-800 rounded nav-trigger" data-page="page-artist-5">Portreler V</a>
+                    <button type="button" class="nav-link menu-toggle uppercase tracking-widest" aria-expanded="false" aria-controls="submenu-artists">Sanatçılar</button>
+                    <div id="submenu-artists" class="submenu mt-5 p-4 rounded shadow-lg space-y-2 w-48">
+                        <a class="block px-2 py-1 hover:text-red-800 rounded nav-trigger" href="#page-artist-1" data-page="page-artist-1">Portreler I</a>
+                        <a class="block px-2 py-1 hover:text-red-800 rounded nav-trigger" href="#page-artist-2" data-page="page-artist-2">Portreler II</a>
+                        <a class="block px-2 py-1 hover:text-red-800 rounded nav-trigger" href="#page-artist-3" data-page="page-artist-3">Portreler III</a>
+                        <a class="block px-2 py-1 hover:text-red-800 rounded nav-trigger" href="#page-artist-4" data-page="page-artist-4">Portreler IV</a>
+                        <a class="block px-2 py-1 hover:text-red-800 rounded nav-trigger" href="#page-artist-5" data-page="page-artist-5">Portreler V</a>
                     </div>
                 </div>
                 <div class="has-submenu relative">
-                    <a class="nav-link menu-toggle">Müzeler</a>
-                    <div class="submenu mt-5 p-4 rounded shadow-lg space-y-2 w-48">
-                        <a class="block px-2 py-1 hover:text-red-800 rounded nav-trigger" data-page="page-museum-1">Louvre</a>
-                        <a class="block px-2 py-1 hover:text-red-800 rounded nav-trigger" data-page="page-museum-2">MOMA</a>
-                        <a class="block px-2 py-1 hover:text-red-800 rounded nav-trigger" data-page="page-museum-3">Uffizi</a>
-                        <a class="block px-2 py-1 hover:text-red-800 rounded nav-trigger" data-page="page-museum-4">Prado</a>
+                    <button type="button" class="nav-link menu-toggle uppercase tracking-widest" aria-expanded="false" aria-controls="submenu-museums">Müzeler</button>
+                    <div id="submenu-museums" class="submenu mt-5 p-4 rounded shadow-lg space-y-2 w-48">
+                        <a class="block px-2 py-1 hover:text-red-800 rounded nav-trigger" href="#page-museum-1" data-page="page-museum-1">Louvre</a>
+                        <a class="block px-2 py-1 hover:text-red-800 rounded nav-trigger" href="#page-museum-2" data-page="page-museum-2">MOMA</a>
+                        <a class="block px-2 py-1 hover:text-red-800 rounded nav-trigger" href="#page-museum-3" data-page="page-museum-3">Uffizi</a>
+                        <a class="block px-2 py-1 hover:text-red-800 rounded nav-trigger" href="#page-museum-4" data-page="page-museum-4">Prado</a>
                     </div>
                 </div>
             </nav>
@@ -228,34 +228,34 @@
         <!-- === MOBİL MENÜ === -->
         <nav id="mobile-menu" class="mobile-menu md:hidden hidden border-t border-gray-200" aria-label="Mobil menü">
             <div class="container mx-auto px-6 py-4 space-y-5">
-                <a class="block uppercase tracking-widest font-semibold nav-trigger" data-page="page-home">Giriş</a>
+                <a class="block uppercase tracking-widest font-semibold nav-trigger" href="#page-home" data-page="page-home">Giriş</a>
                 <div>
                     <p class="text-xs uppercase tracking-widest text-gray-500 mb-2">Sanat Eserleri</p>
                     <div class="grid grid-cols-2 gap-2">
-                        <a class="nav-trigger" data-page="page-art-1">Galeri I</a>
-                        <a class="nav-trigger" data-page="page-art-2">Galeri II</a>
-                        <a class="nav-trigger" data-page="page-art-3">Galeri III</a>
-                        <a class="nav-trigger" data-page="page-art-4">Galeri IV</a>
-                        <a class="nav-trigger" data-page="page-art-5">Galeri V</a>
+                        <a class="nav-trigger" href="#page-art-1" data-page="page-art-1">Galeri I</a>
+                        <a class="nav-trigger" href="#page-art-2" data-page="page-art-2">Galeri II</a>
+                        <a class="nav-trigger" href="#page-art-3" data-page="page-art-3">Galeri III</a>
+                        <a class="nav-trigger" href="#page-art-4" data-page="page-art-4">Galeri IV</a>
+                        <a class="nav-trigger" href="#page-art-5" data-page="page-art-5">Galeri V</a>
                     </div>
                 </div>
                 <div>
                     <p class="text-xs uppercase tracking-widest text-gray-500 mb-2">Sanatçılar</p>
                     <div class="grid grid-cols-2 gap-2">
-                        <a class="nav-trigger" data-page="page-artist-1">Portreler I</a>
-                        <a class="nav-trigger" data-page="page-artist-2">Portreler II</a>
-                        <a class="nav-trigger" data-page="page-artist-3">Portreler III</a>
-                        <a class="nav-trigger" data-page="page-artist-4">Portreler IV</a>
-                        <a class="nav-trigger" data-page="page-artist-5">Portreler V</a>
+                        <a class="nav-trigger" href="#page-artist-1" data-page="page-artist-1">Portreler I</a>
+                        <a class="nav-trigger" href="#page-artist-2" data-page="page-artist-2">Portreler II</a>
+                        <a class="nav-trigger" href="#page-artist-3" data-page="page-artist-3">Portreler III</a>
+                        <a class="nav-trigger" href="#page-artist-4" data-page="page-artist-4">Portreler IV</a>
+                        <a class="nav-trigger" href="#page-artist-5" data-page="page-artist-5">Portreler V</a>
                     </div>
                 </div>
                 <div>
                     <p class="text-xs uppercase tracking-widest text-gray-500 mb-2">Müzeler</p>
                     <div class="grid grid-cols-2 gap-2">
-                        <a class="nav-trigger" data-page="page-museum-1">Louvre</a>
-                        <a class="nav-trigger" data-page="page-museum-2">MOMA</a>
-                        <a class="nav-trigger" data-page="page-museum-3">Uffizi</a>
-                        <a class="nav-trigger" data-page="page-museum-4">Prado</a>
+                        <a class="nav-trigger" href="#page-museum-1" data-page="page-museum-1">Louvre</a>
+                        <a class="nav-trigger" href="#page-museum-2" data-page="page-museum-2">MOMA</a>
+                        <a class="nav-trigger" href="#page-museum-3" data-page="page-museum-3">Uffizi</a>
+                        <a class="nav-trigger" href="#page-museum-4" data-page="page-museum-4">Prado</a>
                     </div>
                 </div>
             </div>
@@ -582,20 +582,20 @@ Bu eser, ilahi güzelliğin ve baharın dünyaya gelişini simgeler.">Hikayeyi O
         </section>
     </main>
     
-    <!-- === HİKAYE MODAL'I (Açılır Pencere) === --><div id="story-modal" class="modal fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-6 hidden z-50">
+    <!-- === HİKAYE MODAL'I (Açılır Pencere) === --><div id="story-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" class="modal fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-6 hidden z-50">
         <div class="modal-content bg-white rounded-lg shadow-2xl max-w-2xl w-full p-8 relative">
-            <button id="close-story-modal-btn" class="absolute top-4 right-6 text-3xl text-gray-400 hover:text-gray-800">&times;</button>
+            <button id="close-story-modal-btn" type="button" aria-label="Hikâyeyi kapat" class="absolute top-4 right-6 text-3xl text-gray-400 hover:text-gray-800">&times;</button>
             <h2 id="modal-title" class="font-serif text-4xl font-bold mb-4 italic"></h2>
             <p id="modal-story" class="text-gray-700 leading-relaxed"></p>
         </div>
     </div>
     
-    <!-- === SANATÇI RESİM MODAL'I === --><div id="image-modal" class="modal fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center p-6 hidden z-50">
+    <!-- === SANATÇI RESİM MODAL'I === --><div id="image-modal" role="dialog" aria-modal="true" aria-label="Sanatçı portresi" class="modal fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center p-6 hidden z-50">
         <div class="relative modal-content">
              <div class="bg-white rounded-full shadow-2xl w-80 h-80 md:w-96 md:h-96 overflow-hidden">
                 <img id="modal-image" src="" alt="Büyütülmüş Sanatçı Portresi" class="w-full h-full object-cover">
             </div>
-            <button id="close-image-modal-btn" class="absolute -top-2 -right-2 text-3xl text-white bg-[var(--main-red)] rounded-full w-10 h-10 flex items-center justify-center leading-none">&times;</button>
+            <button id="close-image-modal-btn" type="button" aria-label="Portreyi kapat" class="absolute -top-2 -right-2 text-3xl text-white bg-[var(--main-red)] rounded-full w-10 h-10 flex items-center justify-center leading-none">&times;</button>
         </div>
     </div>
 
@@ -633,6 +633,12 @@ Bu eser, ilahi güzelliğin ve baharın dünyaya gelişini simgeler.">Hikayeyi O
                 setMobileMenu(mobileMenu.classList.contains('hidden'));
             });
 
+            // --- Alt Menüler ---
+            function closeSubmenus() {
+                submenus.forEach(s => s.classList.remove('is-open'));
+                menuToggles.forEach(t => t.setAttribute('aria-expanded', 'false'));
+            }
+
             // --- Navigasyon Fonksiyonları ---
             function showPage(pageId) {
                 pages.forEach(page => page.classList.toggle('active', page.id === pageId));
@@ -660,7 +666,7 @@ Bu eser, ilahi güzelliğin ve baharın dünyaya gelişini simgeler.">Hikayeyi O
                     event.stopPropagation(); // Diğer click event'lerini tetiklemesini önle
                     showPage(link.dataset.page);
                     // Menüyü kapat
-                    submenus.forEach(s => s.classList.remove('is-open'));
+                    closeSubmenus();
                     setMobileMenu(false);
                 };
                 link.addEventListener('click', handleNavigation);
@@ -675,10 +681,11 @@ Bu eser, ilahi güzelliğin ve baharın dünyaya gelişini simgeler.">Hikayeyi O
                     const currentSubmenu = toggle.nextElementSibling;
                     const wasOpen = currentSubmenu.classList.contains('is-open');
                     // Önce hepsini kapat
-                    submenus.forEach(s => s.classList.remove('is-open'));
+                    closeSubmenus();
                     // Eğer kapalıysa, sadece bunu aç
                     if (!wasOpen) {
                         currentSubmenu.classList.add('is-open');
+                        toggle.setAttribute('aria-expanded', 'true');
                     }
                 });
             });
@@ -689,30 +696,38 @@ Bu eser, ilahi güzelliğin ve baharın dünyaya gelişini simgeler.">Hikayeyi O
             }
 
             // --- Modal Fonksiyonları ---
+            let lastFocused = null; // Modal kapanınca odağın döneceği eleman
+
             function openStoryModal(title, story) {
+                lastFocused = document.activeElement;
                 storyModalTitle.textContent = title;
                 storyModalText.textContent = story;
                 storyModal.classList.remove('hidden');
+                closeStoryModalBtn.focus();
             }
 
             function closeStoryModal() {
                 storyModal.classList.add('hidden');
+                if (lastFocused) lastFocused.focus();
             }
             
             function openImageModal(src) {
+                lastFocused = document.activeElement;
                 modalImage.src = src;
                 imageModal.classList.remove('hidden');
+                closeImageModalBtn.focus();
             }
 
             function closeImageModal() {
                 modalImage.src = ""; // Resmi temizle
                 imageModal.classList.add('hidden');
+                if (lastFocused) lastFocused.focus();
             }
 
             // Olayları body ve window'a delege etme
             document.body.addEventListener('click', (e) => {
                 // Herhangi bir yere tıklayınca açık menüleri kapat
-                submenus.forEach(s => s.classList.remove('is-open'));
+                closeSubmenus();
 
                 if (e.target.matches('.story-btn')) {
                     openStoryModal(e.target.dataset.title, e.target.dataset.story);
@@ -729,6 +744,7 @@ Bu eser, ilahi güzelliğin ve baharın dünyaya gelişini simgeler.">Hikayeyi O
 
             window.addEventListener('keydown', (e) => {
                 if (e.key === 'Escape') {
+                    closeSubmenus();
                     if (!mobileMenu.classList.contains('hidden')) setMobileMenu(false);
                     if (!storyModal.classList.contains('hidden')) closeStoryModal();
                     if (!imageModal.classList.contains('hidden')) closeImageModal();
