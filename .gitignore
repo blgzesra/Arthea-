@@ -1,0 +1,23 @@
+# OS files
+Thumbs.db
+ehthumbs.db
+desktop.ini
+.DS_Store
+
+# Editor / IDE settings (may contain FTP/SFTP credentials)
+.vscode/
+.idea/
+sftp.json
+*.code-workspace
+
+# Secrets
+.env
+.env.*
+
+# Archives, backups and temporary files
+*.zip
+*.rar
+*.7z
+*.bak
+*.tmp
+*~
