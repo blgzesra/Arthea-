@@ -91,6 +91,17 @@
             display: block;
         }
 
+        /* MOBİL MENÜ */
+        .mobile-menu a {
+            cursor: pointer;
+        }
+        .mobile-menu a:hover, .mobile-menu a.active {
+            color: var(--main-red);
+        }
+        .mobile-menu a.active {
+            font-weight: 600;
+        }
+
         /* MODAL (Açılır Pencere) Stilleri */
         .modal {
             transition: opacity 0.3s ease, visibility 0.3s ease;
@@ -206,8 +217,49 @@
                     </div>
                 </div>
             </nav>
-            <div class="flex-1"></div>
+            <div class="flex-1 flex justify-end">
+                <!-- Mobil menü butonu (hamburger) -->
+                <button id="mobile-menu-button" type="button" class="md:hidden p-2 text-gray-800" aria-controls="mobile-menu" aria-expanded="false" aria-label="Menüyü aç">
+                    <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+                </button>
+            </div>
         </div>
+
+        <!-- === MOBİL MENÜ === -->
+        <nav id="mobile-menu" class="mobile-menu md:hidden hidden border-t border-gray-200" aria-label="Mobil menü">
+            <div class="container mx-auto px-6 py-4 space-y-5">
+                <a class="block uppercase tracking-widest font-semibold nav-trigger" data-page="page-home">Giriş</a>
+                <div>
+                    <p class="text-xs uppercase tracking-widest text-gray-500 mb-2">Sanat Eserleri</p>
+                    <div class="grid grid-cols-2 gap-2">
+                        <a class="nav-trigger" data-page="page-art-1">Galeri I</a>
+                        <a class="nav-trigger" data-page="page-art-2">Galeri II</a>
+                        <a class="nav-trigger" data-page="page-art-3">Galeri III</a>
+                        <a class="nav-trigger" data-page="page-art-4">Galeri IV</a>
+                        <a class="nav-trigger" data-page="page-art-5">Galeri V</a>
+                    </div>
+                </div>
+                <div>
+                    <p class="text-xs uppercase tracking-widest text-gray-500 mb-2">Sanatçılar</p>
+                    <div class="grid grid-cols-2 gap-2">
+                        <a class="nav-trigger" data-page="page-artist-1">Portreler I</a>
+                        <a class="nav-trigger" data-page="page-artist-2">Portreler II</a>
+                        <a class="nav-trigger" data-page="page-artist-3">Portreler III</a>
+                        <a class="nav-trigger" data-page="page-artist-4">Portreler IV</a>
+                        <a class="nav-trigger" data-page="page-artist-5">Portreler V</a>
+                    </div>
+                </div>
+                <div>
+                    <p class="text-xs uppercase tracking-widest text-gray-500 mb-2">Müzeler</p>
+                    <div class="grid grid-cols-2 gap-2">
+                        <a class="nav-trigger" data-page="page-museum-1">Louvre</a>
+                        <a class="nav-trigger" data-page="page-museum-2">MOMA</a>
+                        <a class="nav-trigger" data-page="page-museum-3">Uffizi</a>
+                        <a class="nav-trigger" data-page="page-museum-4">Prado</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
     </header>
 
     <main class="max-w-6xl mx-auto px-6 py-16">
@@ -566,12 +618,27 @@ Bu eser, ilahi güzelliğin ve baharın dünyaya gelişini simgeler.">Hikayeyi O
             const modalImage = document.getElementById('modal-image');
             const closeImageModalBtn = document.getElementById('close-image-modal-btn');
 
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            // --- Mobil Menü ---
+            function setMobileMenu(open) {
+                mobileMenu.classList.toggle('hidden', !open);
+                mobileMenuButton.setAttribute('aria-expanded', String(open));
+                mobileMenuButton.setAttribute('aria-label', open ? 'Menüyü kapat' : 'Menüyü aç');
+            }
+
+            mobileMenuButton.addEventListener('click', (event) => {
+                event.stopPropagation();
+                setMobileMenu(mobileMenu.classList.contains('hidden'));
+            });
+
             // --- Navigasyon Fonksiyonları ---
             function showPage(pageId) {
                 pages.forEach(page => page.classList.toggle('active', page.id === pageId));
                 
                 // Tüm nav-link ve submenu linklerindeki aktifliğini gider
-                document.querySelectorAll('.nav-link, .submenu a').forEach(l => l.classList.remove('active'));
+                document.querySelectorAll('.nav-link, .submenu a, .mobile-menu a').forEach(l => l.classList.remove('active'));
 
                 // İlgili linkleri aktif yap
                 const activeLinks = document.querySelectorAll(`.nav-trigger[data-page="${pageId}"]`);
@@ -594,6 +661,7 @@ Bu eser, ilahi güzelliğin ve baharın dünyaya gelişini simgeler.">Hikayeyi O
                     showPage(link.dataset.page);
                     // Menüyü kapat
                     submenus.forEach(s => s.classList.remove('is-open'));
+                    setMobileMenu(false);
                 };
                 link.addEventListener('click', handleNavigation);
                 link.addEventListener('contextmenu', handleNavigation);
@@ -661,6 +729,7 @@ Bu eser, ilahi güzelliğin ve baharın dünyaya gelişini simgeler.">Hikayeyi O
 
             window.addEventListener('keydown', (e) => {
                 if (e.key === 'Escape') {
+                    if (!mobileMenu.classList.contains('hidden')) setMobileMenu(false);
                     if (!storyModal.classList.contains('hidden')) closeStoryModal();
                     if (!imageModal.classList.contains('hidden')) closeImageModal();
                 }
